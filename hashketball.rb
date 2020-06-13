@@ -1,4 +1,5 @@
 # Write your code below game_hash
+
 def game_hash
   {
     home: {
@@ -126,4 +127,116 @@ def game_hash
   }
 end
 
+pp game_hash[:home][:team_name]
+
 # Write code here
+
+def num_points_scored(player_name)
+  home_players = game_hash[:home][:players]
+  away_players = game_hash[:away][:players]
+  all_players = (home_players + away_players)
+  all_players.each do |element|
+    element.each do |key, value|
+      if element[key] == player_name
+        points_scored = element[:points]
+        return points_scored
+      end
+    end
+  end
+end
+
+puts num_points_scored("Jeff Adrien")
+
+def shoe_size(player_name)
+  home_players = game_hash[:home][:players]
+  away_players = game_hash[:away][:players]
+  all_players = (home_players + away_players)
+  all_players.each do |element|
+    element.each do |key, value|
+      if element[key] == player_name
+        shoe_size = element[:shoe]
+        return shoe_size
+      end
+    end
+  end
+end
+
+puts shoe_size("Jeff Adrien")
+
+def team_colors(team)
+
+  game_hash.each do |key, value|
+    if value[:team_name] == team
+      return value[:colors]
+    end
+  end
+end
+
+
+
+def team_names
+  teams = []
+  game_hash.each do |key, value|
+    teams.push(value[:team_name])
+  end
+  teams
+end
+
+puts team_names
+
+def player_numbers (team_name)
+  jersey_numbers = []
+  game_hash.each do |key, value|
+    value[:players].each do |element|
+      if value[:team_name] == team_name
+        jersey_numbers.push(element[:number])
+        end
+      end
+  end
+  jersey_numbers
+end
+
+
+puts player_numbers("Brooklyn Nets")
+
+def player_stats(player)
+
+game_hash.each do |key, value|
+  value[:players].each do |element|
+    if element[:player_name] == player
+      return element
+    end
+  end
+end
+
+end
+
+puts player_stats("Kemba Walker")
+
+def big_shoe_rebounds
+  game_hash.each do |key, value|
+    value[:players].each do |element|
+      if element[:shoe] == 19
+        return element[:rebounds]
+      end
+    end
+  end
+end
+
+puts big_shoe_rebounds
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-# Write your code below game_hash
+
 def game_hash
   {
     home: {
@@ -126,4 +126,73 @@ def game_hash
   }
 end
 
-# Write code here
+def num_points_scored (players_name)
+  game_hash.each do |team, sub_cat|
+  sub_cat[:players].each do |player_profile|
+  if player_profile[:player_name] == players_name 
+   return player_profile[:points]
+    end
+   end
+  end 
+end
+
+def shoe_size (players_name)
+game_hash.each do |team, sub_cat|
+  sub_cat[:players].each do |player_profile|
+  if player_profile[:player_name] == players_name 
+   return player_profile[:shoe]
+    end
+   end
+  end 
+end
+
+def team_colors (team_name)
+  game_hash.each do |team, sub_cat|
+    if sub_cat[:team_name] == team_name
+      return sub_cat[:colors]
+    end
+  end
+end
+
+def team_names 
+ teams = []
+  teams << game_hash[:home][:team_name]
+  teams << game_hash[:away][:team_name]
+  return teams
+end
+
+def player_numbers(team_name)
+ jersey_numbers = []
+   game_hash.each do |team, sub_cat|
+    if sub_cat[:team_name] == team_name
+      sub_cat[:players].each do |player_profile|
+        jersey_numbers << player_profile[:number]
+      end
+    end
+  end
+ return jersey_numbers
+end
+
+def player_stats (players_name)
+  game_hash.each do |team, sub_cat|
+    sub_cat[:players].each do |player_profile|
+      if player_profile[:player_name] == players_name
+      return player_profile
+      end
+    end  
+  end
+end
+
+def big_shoe_rebounds 
+  biggest_size = 0
+  rebounds = 0
+    game_hash.each do |team, sub_cat|
+      sub_cat[:players].each do |player_profile|
+        if player_profile[:shoe] > biggest_size
+          biggest_size = player_profile[:shoe]
+          rebounds = player_profile[:rebounds]
+        end
+      end
+    end
+return rebounds
+end

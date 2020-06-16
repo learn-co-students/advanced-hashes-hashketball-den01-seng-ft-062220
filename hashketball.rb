@@ -1,3 +1,5 @@
+require 'pry'
+
 # Write your code below game_hash
 def game_hash
   {
@@ -126,4 +128,120 @@ def game_hash
   }
 end
 
-# Write code here
+def num_points_scored(name)
+game = game_hash
+count = 0
+while count < 6 do
+  #binding.pry
+  if game[:home][:players][count][:player_name] == name
+    result = game[:home][:players][count][:points] 
+    return result
+  end
+  if game[:away][:players][count][:player_name] == name
+    #binding.pry
+    result = game[:away][:players][count][:points]
+    return result
+  end
+  count +=1
+end
+end
+
+def shoe_size(name)
+game = game_hash
+count = 0
+while count < 6 do
+  #binding.pry
+    if game[:home][:players][count][:player_name] == name
+    result = game[:home][:players][count][:shoe] 
+    return result
+  end
+  if game[:away][:players][count][:player_name] == name
+    #binding.pry
+    result = game[:away][:players][count][:shoe]
+    return result
+  end
+  count +=1
+end
+end
+
+def team_colors(team)
+  game_hash.each do |location,team_data|
+    if team_data[:team_name] == team
+      return team_data[:colors]
+    end
+  end
+end
+
+def team_names
+  result_array = []
+  game_hash.each do |location,team_data|
+    result_array << team_data[:team_name]
+  end
+  result_array
+end
+
+def player_numbers(team)
+  result_array = []
+  count = 0
+  game_hash.each do |location,team_data|
+    #binding.pry
+    if team_data[:team_name] == team
+      team_data.each do |attribute, data|
+       #binding.pry
+        if attribute == :players
+         while count < 5 do 
+            result_array << team_data[:players][count][:number]
+            count += 1
+          #binding.pry
+         end
+       #binding.pry
+       end
+      end
+   end
+ end
+  #binding.pry
+  result_array
+end
+
+def player_stats(name)
+  game = game_hash
+count = 0
+while count < 6 do
+  #binding.pry
+  if game[:home][:players][count][:player_name] == name
+    result = game[:home][:players][count] 
+    return result
+  end
+  if game[:away][:players][count][:player_name] == name
+    #binding.pry
+    result = game[:away][:players][count]
+    return result
+  end
+  count +=1
+end
+  
+end
+
+def big_shoe_rebounds
+  game = game_hash
+count = 0
+max_size = 0
+result = 0
+while count < 5 do
+  #binding.pry
+  if game[:home][:players][count][:shoe] > max_size
+    max_size = game[:home][:players][count][:shoe]
+    #binding.pry
+    result = game[:home][:players][count][:rebounds] 
+    #binding.pry
+  end
+  if game[:away][:players][count][:shoe] > max_size
+    max_size = game[:away][:players][count][:shoe]
+    result = game[:away][:players][count][:rebounds]
+  end
+  count +=1
+  #binding.pry
+end
+binding.pry
+result
+end

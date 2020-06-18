@@ -219,7 +219,6 @@ def big_shoe_rebounds
     team_data.each do |attribute, info|
       if info.is_a?(Array) && info[0].is_a?(Hash)
         info.each do |player|
-          #binding.pry 
           if player[:shoe] > shoe   
             shoe = player[:shoe]
            end

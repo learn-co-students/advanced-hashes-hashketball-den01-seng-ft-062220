@@ -1,4 +1,5 @@
 # Write your code below game_hash
+require 'pry'
 def game_hash
   {
     home: {
@@ -127,3 +128,107 @@ def game_hash
 end
 
 # Write code here
+
+def num_points_scored(player_of_interest)
+  score = 0  
+  game_hash.each do |team, team_data|
+    team_data.each do |attribute, info|
+      if info.is_a?(Array) && info[0].is_a?(Hash)
+        info.each do |player|
+          if player[:player_name] == player_of_interest
+            score = player[:points] 
+          end
+        end
+      end
+    end
+  end
+  p score 
+end
+
+def shoe_size(player_of_interest)
+    shoe = 0  
+  game_hash.each do |team, team_data|
+    team_data.each do |attribute, info|
+      if info.is_a?(Array) && info[0].is_a?(Hash)
+        info.each do |player|
+          if player[:player_name] == player_of_interest
+            shoe = player[:shoe] 
+          end
+        end
+      end
+    end
+  end
+  p shoe
+end
+
+def team_colors(team_of_interest)
+  colors_output = nil 
+  game_hash.each do |team, team_data|
+    if team_data[:team_name] == team_of_interest
+      colors_output = team_data[:colors] 
+    end
+  end
+  p colors_output
+end
+
+
+def team_names
+  name_array = []
+  game_hash.each do |team, team_data|
+    name_array << team_data[:team_name]
+  end
+  p name_array
+end
+
+def player_numbers(team_of_interest)
+  numbers_array = [] 
+  game_hash.each do |team, team_data|
+    if team_data[:team_name] == team_of_interest
+      team_data.each do |attribute, info|
+        if info.is_a?(Array) && info[0].is_a?(Hash)
+          info.each do |player| 
+            numbers_array << player[:number]
+          end
+        end
+      end 
+    end
+  end
+  p numbers_array
+end
+
+ def player_stats(player_of_interest)
+    stat_arry = []  
+  game_hash.each do |team, team_data|
+    team_data.each do |attribute, info|
+      if info.is_a?(Array) && info[0].is_a?(Hash)
+        info.each do |player|
+          if player[:player_name] == player_of_interest
+            stat_arry = player 
+          end
+        end
+      end
+    end
+  end
+  p stat_arry
+end
+
+def big_shoe_rebounds
+    shoe = 0
+    rebounds = 0
+  game_hash.each do |team, team_data|
+    team_data.each do |attribute, info|
+      if info.is_a?(Array) && info[0].is_a?(Hash)
+        info.each do |player|
+          #binding.pry 
+          if player[:shoe] > shoe   
+            shoe = player[:shoe]
+           end
+           if player[:shoe] >= shoe
+              rebounds = player[:rebounds]
+          end
+        end
+      end
+    end
+  end
+  p rebounds 
+end

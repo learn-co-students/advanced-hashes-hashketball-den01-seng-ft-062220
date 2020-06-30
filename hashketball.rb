@@ -143,8 +143,8 @@ class Team
     @@all
   end
 
-  def add_player player
-    new_player = Player.new(player, self)
+  def add_player player_hash
+    new_player = Player.new(player_hash)
     @players << new_player
     new_player
   end
@@ -160,9 +160,16 @@ class Player
 
   @@all = []
 
-  def initialize name, team
-    @name = name
-    @team = team
+  def initialize player_name:, number:, shoe:, points:, rebounds:, assists:, steals:, blocks:, slam_dunks:
+    @name = player_name
+    @number = number
+    @shoe = shoe
+    @points = points
+    @rebounds = rebounds
+    @assists = assists
+    @steals = steals
+    @blocks = blocks
+    @slam_dunks = slam_dunks
     @@all << self
   end
 
@@ -202,15 +209,7 @@ def hash_to_class
     new_team.location = location[0]
     new_team.colors = location[1][:colors]
     location[1][:players].each do |player|
-      new_player = new_team.add_player player[:player_name]
-      new_player.number = player[:number]
-      new_player.shoe = player[:shoe]
-      new_player.points = player[:points]
-      new_player.rebounds = player[:rebounds]
-      new_player.assists = player[:assists]
-      new_player.steals = player[:steals]
-      new_player.blocks = player[:blocks]
-      new_player.slam_dunks = player[:slam_dunks]
+      new_team.add_player(player)
     end
   end
 end

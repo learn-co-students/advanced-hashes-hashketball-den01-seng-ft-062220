@@ -1,5 +1,4 @@
 require 'pry'
-
 # Write your code below game_hash
 def game_hash
   {
@@ -128,120 +127,201 @@ def game_hash
   }
 end
 
-def num_points_scored(name)
-game = game_hash
-count = 0
-while count < 6 do
-  #binding.pry
-  if game[:home][:players][count][:player_name] == name
-    result = game[:home][:players][count][:points] 
-    return result
+class Team
+  attr_accessor :name, :location, :colors, :players
+
+  @@all = []
+
+  def initialize name
+    @name = name
+    @players = []
+    @colors = []
+    @@all << self
   end
-  if game[:away][:players][count][:player_name] == name
-    #binding.pry
-    result = game[:away][:players][count][:points]
-    return result
+
+  def self.all
+    @@all
   end
-  count += 1
-end
+
+  def add_player player
+    new_player = Player.new(player, self)
+    @players << new_player
+    new_player
+  end
+
+  def self.get_team_by_name team_name
+    all.find { |team| team.name == team_name }
+  end
+
 end
 
-def shoe_size(name)
-game = game_hash
-count = 0
-while count < 6 do
-  # binding.pry
-  if game[:home][:players][count][:player_name] == name
-    result = game[:home][:players][count][:shoe] 
-    return result
+class Player
+  attr_accessor :name, :number, :shoe, :points, :rebounds, :assists, :steals, :blocks, :slam_dunks, :team
+
+  @@all = []
+
+  def initialize name, team
+    @name = name
+    @team = team
+    @@all << self
   end
-  if game[:away][:players][count][:player_name] == name
-    # binding.pry
-    result = game[:away][:players][count][:shoe]
-    return result
+
+  def self.all
+    @@all
   end
-  count +=1
-end
+
+  def self.get_player_by_name player_name
+    all.find { |player| player.name == player_name }
+  end
+
+  def player_stats_hash
+    player = {}
+    new_player = self
+    player[:player_name] = new_player.name
+    player[:number] = new_player.number
+    player[:shoe] = new_player.shoe
+    player[:points] = new_player.points
+    player[:rebounds] = new_player.rebounds
+    player[:assists] = new_player.assists
+    player[:steals] = new_player.steals
+    player[:blocks] = new_player.blocks
+    player[:slam_dunks] = new_player.slam_dunks
+    player
+  end
 end
 
-def team_colors(team)
-  game_hash.each do |_location,team_data|
-    if team_data[:team_name] == team
-      return team_data[:colors]
+def player_array
+  game_hash.map do |_, team|
+    team[:players]
+  end.flatten
+end
+
+def hash_to_class
+  game_hash.each do |location|
+    new_team = Team.new(location[1][:team_name])
+    new_team.location = location[0]
+    new_team.colors = location[1][:colors]
+    location[1][:players].each do |player|
+      new_player = new_team.add_player player[:player_name]
+      new_player.number = player[:number]
+      new_player.shoe = player[:shoe]
+      new_player.points = player[:points]
+      new_player.rebounds = player[:rebounds]
+      new_player.assists = player[:assists]
+      new_player.steals = player[:steals]
+      new_player.blocks = player[:blocks]
+      new_player.slam_dunks = player[:slam_dunks]
     end
   end
+end
+
+hash_to_class
+
+def num_points_scored player_name
+  Player.get_player_by_name(player_name).points
+end
+
+def shoe_size player_name
+  Player.get_player_by_name(player_name).shoe
+end
+
+def team_colors team_name
+  Team.get_team_by_name(team_name).colors
 end
 
 def team_names
-  result_array = []
-  game_hash.each do |_location,team_data|
-    result_array << team_data[:team_name]
-  end
-  result_array
+  Team.all.map(&:name)
 end
 
-def player_numbers(team)
-  result_array = []
-  count = 0
-  game_hash.each do |_location,team_data|
-    #binding.pry
-    if team_data[:team_name] == team
-      team_data.each do |attribute, _data|
-       #binding.pry
-        if attribute == :players
-          while count < 5 do 
-            result_array << team_data[:players][count][:number]
-            count += 1
-          #binding.pry
-        end
-       #binding.pry
-      end
-    end
-  end
- end
-  #binding.pry
-  result_array
+def player_numbers team_name
+  Team.get_team_by_name(team_name).players.map(&:number)
 end
 
-def player_stats(name)
-  game = game_hash
-count = 0
-while count < 6 do
-  #binding.pry
-  if game[:home][:players][count][:player_name] == name
-    result = game[:home][:players][count] 
-    return result
-  end
-  if game[:away][:players][count][:player_name] == name
-    #binding.pry
-    result = game[:away][:players][count]
-    return result
-  end
-  count +=1
-end
-  
+def player_stats player_name
+  Player.get_player_by_name(player_name).player_stats_hash
 end
 
 def big_shoe_rebounds
-  game = game_hash
-count = 0
-max_size = 0
-result = 0
-while count < 5 do
-  #binding.pry
-  if game[:home][:players][count][:shoe] > max_size
-    max_size = game[:home][:players][count][:shoe]
-    #binding.pry
-    result = game[:home][:players][count][:rebounds] 
-    #binding.pry
-  end
-  if game[:away][:players][count][:shoe] > max_size
-    max_size = game[:away][:players][count][:shoe]
-    result = game[:away][:players][count][:rebounds]
-  end
-  count +=1
-  #binding.pry
+  Player.all.max_by(&:shoe).rebounds
 end
-binding.pry
-result
-end
+
+# def get_player_by_name player_name
+#   player_array.find do |player|
+#     player[:player_name] == player_name
+#   end
+# end
+
+# def num_points_scored player_name
+#   get_player_by_name(player_name)[:points]
+# end
+
+# def shoe_size player_name
+#   get_player_by_name(player_name)[:shoe]
+# end
+
+# def team_colors(team_name)
+#   game_hash.each do |_location, team_data|
+#     return team_data[:colors] if team_data[:team_name] == team_name
+#   end
+# end
+
+# def team_names
+#   result_array = []
+#   game_hash.each do |_location,team_data|
+#     result_array << team_data[:team_name]
+#   end
+#   result_array
+# end
+
+# def player_numbers(team)
+#   result_array = []
+#   count = 0
+#   game_hash.each do |_location,team_data|
+#     if team_data[:team_name] == team
+#       team_data.each do |attribute, _data|
+#         if attribute == :players
+#           while count < 5 do
+#             result_array << team_data[:players][count][:number]
+#             count += 1
+#         end
+#       end
+#     end
+#   end
+#  end
+#   result_array
+# end
+
+# def player_stats(name)
+#   game = game_hash
+#   count = 0
+#   while count < 6 do
+#     if game[:home][:players][count][:player_name] == name
+#       result = game[:home][:players][count]
+#       return result
+#     end
+#     if game[:away][:players][count][:player_name] == name
+#       result = game[:away][:players][count]
+#       return result
+#     end
+#     count += 1
+#   end
+# end
+
+# def big_shoe_rebounds
+#   game = game_hash
+#   count = 0
+#   max_size = 0
+#   result = 0
+#   while count < 5 do
+#     if game[:home][:players][count][:shoe] > max_size
+#       max_size = game[:home][:players][count][:shoe]
+#       result = game[:home][:players][count][:rebounds]
+#     end
+#     if game[:away][:players][count][:shoe] > max_size
+#       max_size = game[:away][:players][count][:shoe]
+#       result = game[:away][:players][count][:rebounds]
+#     end
+#     count += 1
+#   end
+#   result
+# end

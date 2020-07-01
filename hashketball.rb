@@ -156,20 +156,12 @@ class Team
 end
 
 class Player
-  attr_accessor :name, :number, :shoe, :points, :rebounds, :assists, :steals, :blocks, :slam_dunks, :team
+  attr_accessor :player_name, :number, :shoe, :points, :rebounds, :assists, :steals, :blocks, :slam_dunks, :team
 
   @@all = []
 
-  def initialize player_name:, number:, shoe:, points:, rebounds:, assists:, steals:, blocks:, slam_dunks:
-    @name = player_name
-    @number = number
-    @shoe = shoe
-    @points = points
-    @rebounds = rebounds
-    @assists = assists
-    @steals = steals
-    @blocks = blocks
-    @slam_dunks = slam_dunks
+  def initialize attributes
+    attributes.each { |key, value| self.send(("#{key}="), value) }
     @@all << self
   end
 
@@ -178,13 +170,13 @@ class Player
   end
 
   def self.get_player_by_name player_name
-    all.find { |player| player.name == player_name }
+    all.find { |player| player.player_name == player_name }
   end
 
   def player_stats_hash
     player = {}
     new_player = self
-    player[:player_name] = new_player.name
+    player[:player_name] = new_player.player_name
     player[:number] = new_player.number
     player[:shoe] = new_player.shoe
     player[:points] = new_player.points
@@ -243,84 +235,3 @@ end
 def big_shoe_rebounds
   Player.all.max_by(&:shoe).rebounds
 end
-
-# def get_player_by_name player_name
-#   player_array.find do |player|
-#     player[:player_name] == player_name
-#   end
-# end
-
-# def num_points_scored player_name
-#   get_player_by_name(player_name)[:points]
-# end
-
-# def shoe_size player_name
-#   get_player_by_name(player_name)[:shoe]
-# end
-
-# def team_colors(team_name)
-#   game_hash.each do |_location, team_data|
-#     return team_data[:colors] if team_data[:team_name] == team_name
-#   end
-# end
-
-# def team_names
-#   result_array = []
-#   game_hash.each do |_location,team_data|
-#     result_array << team_data[:team_name]
-#   end
-#   result_array
-# end
-
-# def player_numbers(team)
-#   result_array = []
-#   count = 0
-#   game_hash.each do |_location,team_data|
-#     if team_data[:team_name] == team
-#       team_data.each do |attribute, _data|
-#         if attribute == :players
-#           while count < 5 do
-#             result_array << team_data[:players][count][:number]
-#             count += 1
-#         end
-#       end
-#     end
-#   end
-#  end
-#   result_array
-# end
-
-# def player_stats(name)
-#   game = game_hash
-#   count = 0
-#   while count < 6 do
-#     if game[:home][:players][count][:player_name] == name
-#       result = game[:home][:players][count]
-#       return result
-#     end
-#     if game[:away][:players][count][:player_name] == name
-#       result = game[:away][:players][count]
-#       return result
-#     end
-#     count += 1
-#   end
-# end
-
-# def big_shoe_rebounds
-#   game = game_hash
-#   count = 0
-#   max_size = 0
-#   result = 0
-#   while count < 5 do
-#     if game[:home][:players][count][:shoe] > max_size
-#       max_size = game[:home][:players][count][:shoe]
-#       result = game[:home][:players][count][:rebounds]
-#     end
-#     if game[:away][:players][count][:shoe] > max_size
-#       max_size = game[:away][:players][count][:shoe]
-#       result = game[:away][:players][count][:rebounds]
-#     end
-#     count += 1
-#   end
-#   result
-# end
